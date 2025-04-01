@@ -4,6 +4,8 @@
   <br> <br> pretty-checkbox.css <br>
 </h1>
 
+<h2 align="center">This fork is my attempt to add support for CSS Properties to pretty-checkbox (at least for the colors)</h2>
+
 <h4 align="center">A pure CSS library to beautify checkbox and radio buttons.</h4>
 
 <p align="center">
