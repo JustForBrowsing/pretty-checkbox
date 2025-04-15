@@ -1,0 +1,1068 @@
+/**
+ * pretty-checkbox.css
+ *
+ * A pure CSS library to beautify checkbox and radio buttons
+ *
+ * Source: https://github.com/lokesh-coder/pretty-checkbox
+ * Demo:   https://lokesh-coder.github.io/pretty-checkbox
+ *
+ * Copyright (c) 2017 Lokesh rajendran
+ * Adaptation to use CSS variables (C) 2025 JustForBrowsing
+ * Source: https://github.com/lokesh-coder/pretty-checkbox
+ */
+ 
+:root {
+    /* --pretty--class-name: pretty !default; */
+
+    /** colors */
+    /* --pretty-color-default: #bdc3c7 !default; */
+    @property --pretty-color-default {
+        syntax:        "<color>";
+        inherits:      true;
+        initial-value: #bdc3c7;
+    }
+    /* --pretty-color-primary: #428bca !default; */
+    @property --pretty-color-primary {
+        syntax:        "<color>";
+        inherits:      true;
+        initial-value: #428bca;
+    }
+    /* --pretty-color-info:    #5bc0de !default; */
+    @property --pretty-color-info {
+        syntax:        "<color>";
+        inherits:      true;
+        initial-value: #5bc0de;
+    }
+    /* --pretty-color-success: #5cb85c !default; */
+    @property --pretty-color-success {
+        syntax:        "<color>";
+        inherits:      true;
+        initial-value: #5cb85c;
+    }
+    /* --pretty-color-warning: #f0ad4e !default; */
+    @property --pretty-color-warning {
+        syntax:        "<color>";
+        inherits:      true;
+        initial-value: #f0ad4e;
+    }
+    /* --pretty-color-danger:  #d9534f !default; */
+    @property --pretty-color-danger {
+        syntax:        "<color>";
+        inherits:      true;
+        initial-value: #d9534f;
+    }
+    /* --pretty-color-dark:    #5a656b !default; */
+    @property --pretty-color-dark {
+        syntax:        "<color>";
+        inherits:      true;
+        initial-value: #5a656b;
+    }
+    
+    /** z-index */
+    /* --pretty-z-index-back:    0 !default; */
+    @property --pretty-z-index-back {
+        syntax:        "auto | <integer>";
+        inherits:      true;
+        initial-value: 0;
+    }
+    /* --pretty-z-index-between: 1 !default; */
+    @property --pretty-z-index-between {
+        syntax:        "auto | <integer>";
+        inherits:      true;
+        initial-value: 1;
+    }
+    /* --pretty-z-index-front:   2 !default; */
+    @property --pretty-z-index-front {
+        syntax:        "auto | <integer>";
+        inherits:      true;
+        initial-value: 2;
+    }
+    
+    /** box */
+    /* --pretty-curve-radius: 20% !default; */
+    @property --pretty-curve-radius {
+        syntax:        "<length-percentage>";
+        inherits:      true;
+        initial-value: 20%;
+    }
+    /* --pretty-box-size:     calc(1em + 2px) !default; */
+    @property --pretty-box-size {
+        syntax:        "<length-percentage> | min-content | max-content | fit-content";
+        inherits:      true;
+        initial-value: calc(1em + 2px);
+    }
+    
+    /** text */
+    /* --pretty-label-text-offset:        1.5em !default; */
+    @property --pretty-label-text-offset {
+        syntax:        "<length-percentage> | min-content | max-content | fit-content";
+        inherits:      true;
+        initial-value: 1.5em;
+    }
+    /* --pretty-label-text-offset-switch: 2.5em !default; */
+    @property --label-text-offset-switch {
+        syntax:        "<length-percentage> | min-content | max-content | fit-content";
+        inherits:      true;
+        initial-value: 2.5em;
+    }
+    
+    /** scale */
+    /* --pretty-2x: 1.2em !default; */
+    @property --pretty-2x {
+        syntax:        "<length-percentage> | min-content | max-content | fit-content";
+        inherits:      true;
+        initial-value: 1.2em;
+    }
+    
+    /*
+    // color set
+    --pretty-colors: (primary, --pretty-color-primary), 
+                     (info,    --pretty-color-info),
+                     (success, --pretty-color-success),
+                     (warning, --pretty-color-warning), 
+                     (danger,  --pretty-color-danger) !default;
+    */
+    
+    /** position */
+    --pretty-top:               8;
+    --pretty-top-switch:        calc(calc(--pretty-top * 2) * 1%);
+    --pretty-top-offset:        calc((0% - (100% - 1em)) - var(--pretty-top * 1%);
+    --pretty-top-offset-switch: calc((0% - (100% - 1em)) - var(--pretty-top-switch);
+    
+    /** dev */
+    /* --pretty-debug:       0 !default;  // 0: false, 1: true */
+    @property --pretty-debug {
+        syntax:        "0 | 1";
+        inherits:      true;
+        initial-value: 0;
+    }
+    /* --pretty-err-message: 'Error: Invalid input type!' !default; */
+    @property --pretty-err-message {
+        syntax:        "<string>";
+        inherits:      true;
+        initial-value: 'Error: Invalid input type!';
+    }
+}
+
+@container card style(--pretty-debug:1) {
+    .pretty input:not([type='checkbox']):not([type='radio']) + *:after {
+        content: 'Error: Invalid input type!';
+        border: 1px solid #dedede;
+        border-left: 3px solid var(--pretty-color-danger);
+        padding: 9px;
+        font-size: 1em;
+        font-weight: 600;
+        color: var(--pretty-color-danger);
+        position: absolute;
+        z-index: 3;
+        background: #fbfbfb;
+        top: 0;
+        left: 0;
+    }
+}
+
+.pretty * {
+    box-sizing: border-box;
+}
+
+.pretty input:not([type='checkbox']):not([type='radio']) {
+    display: none;
+}
+
+.pretty {
+    position: relative;
+    display: inline-block;
+    margin-right: 1em;
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.pretty input {
+    position: absolute;
+    left: 0;
+    top: 0;
+    min-width: 1em;
+    width: 100%;
+    height: 100%;
+    z-index: var(--pretty-z-index-front);
+    opacity: 0;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+}
+
+.pretty .state label {
+    position: initial;
+    display: inline-block;
+    font-weight: normal;
+    margin: 0;
+    text-indent: var(--pretty-label-text-offset);
+    min-width:   var(--pretty-box-size);
+}
+
+.pretty .state label:before,
+.pretty .state label:after {
+    content: '';
+    width: var(--pretty-box-size);
+    height: var(--pretty-box-size);
+    display: block;
+    box-sizing: border-box;
+    border-radius: 0;
+    border: 1px solid transparent;
+    z-index: var(--pretty-z-index-back);
+    position: absolute;
+    left: 0;
+    top: var(--pretty-top-offset);
+    background-color: transparent;
+}
+
+.pretty .state label:before {
+    border-color: var(--pretty-color-default);
+}
+
+.pretty .state.p-is-hover,
+.pretty .state.p-is-indeterminate {
+    display: none;
+}
+
+@-webkit-keyframes zoom {
+    0% {
+        opacity: 0;
+        -webkit-transform: scale(0);
+        transform: scale(0);
+    }
+}
+
+@keyframes zoom {
+    0% {
+        opacity: 0;
+        -webkit-transform: scale(0);
+        transform: scale(0);
+    }
+}
+
+@-webkit-keyframes tada {
+
+}
+
+@keyframes tada {
+    0% {
+        -webkit-animation-timing-function: ease-in;
+        animation-timing-function: ease-in;
+        opacity: 0;
+        -webkit-transform: scale(7);
+        transform: scale(7);
+    }
+    38% {
+        -webkit-animation-timing-function: ease-out;
+        animation-timing-function: ease-out;
+        opacity: 1;
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+    55% {
+        -webkit-animation-timing-function: ease-in;
+        animation-timing-function: ease-in;
+        -webkit-transform: scale(1.5);
+        transform: scale(1.5);
+    }
+    72% {
+        -webkit-animation-timing-function: ease-out;
+        animation-timing-function: ease-out;
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+    81% {
+        -webkit-animation-timing-function: ease-in;
+        animation-timing-function: ease-in;
+        -webkit-transform: scale(1.24);
+        transform: scale(1.24);
+    }
+    89% {
+        -webkit-animation-timing-function: ease-out;
+        animation-timing-function: ease-out;
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+    95% {
+        -webkit-animation-timing-function: ease-in;
+        animation-timing-function: ease-in;
+        -webkit-transform: scale(1.04);
+        transform: scale(1.04);
+    }
+    100% {
+        -webkit-animation-timing-function: ease-out;
+        animation-timing-function: ease-out;
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+}
+
+@-webkit-keyframes jelly {
+    0% {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+    }
+    30% {
+        -webkit-transform: scale3d(0.75, 1.25, 1);
+        transform: scale3d(0.75, 1.25, 1);
+    }
+    40% {
+        -webkit-transform: scale3d(1.25, 0.75, 1);
+        transform: scale3d(1.25, 0.75, 1);
+    }
+    50% {
+        -webkit-transform: scale3d(0.85, 1.15, 1);
+        transform: scale3d(0.85, 1.15, 1);
+    }
+    65% {
+        -webkit-transform: scale3d(1.05, 0.95, 1);
+        transform: scale3d(1.05, 0.95, 1);
+    }
+    75% {
+        -webkit-transform: scale3d(0.95, 1.05, 1);
+        transform: scale3d(0.95, 1.05, 1);
+    }
+    100% {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+    }
+}
+
+@keyframes jelly {
+    0% {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+    }
+    30% {
+        -webkit-transform: scale3d(0.75, 1.25, 1);
+        transform: scale3d(0.75, 1.25, 1);
+    }
+    40% {
+        -webkit-transform: scale3d(1.25, 0.75, 1);
+        transform: scale3d(1.25, 0.75, 1);
+    }
+    50% {
+        -webkit-transform: scale3d(0.85, 1.15, 1);
+        transform: scale3d(0.85, 1.15, 1);
+    }
+    65% {
+        -webkit-transform: scale3d(1.05, 0.95, 1);
+        transform: scale3d(1.05, 0.95, 1);
+    }
+    75% {
+        -webkit-transform: scale3d(0.95, 1.05, 1);
+        transform: scale3d(0.95, 1.05, 1);
+    }
+    100% {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+    }
+}
+
+@-webkit-keyframes rotate {
+    0% {
+        opacity: 0;
+        -webkit-transform: translateZ(-200px) rotate(-45deg);
+        transform: translateZ(-200px) rotate(-45deg);
+        
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: translateZ(0) rotate(0);
+        transform: translateZ(0) rotate(0);
+    }
+}
+
+@keyframes rotate {
+    0% {
+        opacity: 0;
+        -webkit-transform: translateZ(-200px) rotate(-45deg);
+        transform: translateZ(-200px) rotate(-45deg);
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: translateZ(0) rotate(0);
+        transform: translateZ(0) rotate(0);
+    }
+}
+
+@-webkit-keyframes pulse {
+    0% {
+        box-shadow: 0px 0px 0px 0px var(--pretty-color-default);
+    }
+    100% {
+        box-shadow: 0px 0px 0px var(--pretty-label-text-offset) rgba(189, 195, 199, 0);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0px 0px 0px 0px var(--pretty-color-default);
+    }
+    100% {
+        box-shadow: 0px 0px 0px var(--pretty-label-text-offset) rgba(189, 195, 199, 0);
+    }
+}
+
+.pretty.p-default.p-fill .state label:after {
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+}
+
+.pretty.p-default .state label:after {
+    -webkit-transform: scale(0.6);
+    -ms-transform: scale(0.6);
+    transform: scale(0.6);
+}
+
+.pretty.p-default input:checked ~ .state label:after {
+    background-color: var(--pretty-color-default) !important;
+}
+
+.pretty.p-default.p-thick .state label:before,
+.pretty.p-default.p-thick .state label:after {
+    border-width: calc(1em / 7);  
+}
+
+.pretty.p-default.p-thick .state label:after {
+    -webkit-transform: scale(0.4) !important;
+    -ms-transform: scale(0.4) !important;
+    transform: scale(0.4) !important;
+}
+
+.pretty.p-icon .state .icon {
+    position: absolute;
+    font-size: 1em;
+    width: var(--pretty-box-size);
+    height: var(--pretty-box-size);
+    left: 0;
+    z-index: var(--pretty-z-index-between);
+    text-align: center;
+    line-height: normal;
+    top: var(--pretty-top-offset);
+    border: 1px solid transparent;
+    opacity: 0;
+}
+
+.pretty.p-icon .state .icon:before {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    line-height: 1;
+}
+
+.pretty.p-icon input:checked ~ .state .icon {
+    opacity: 1;
+}
+
+.pretty.p-icon input:checked ~ .state label:before {
+    border-color: var(--pretty-color-dark);
+}
+
+.pretty.p-svg .state .svg {
+    position: absolute;
+    font-size: 1em;
+    width: var(--pretty-box-size);
+    height: var(--pretty-box-size);
+    left: 0;
+    z-index: var(--pretty-z-index-between);
+    text-align: center;
+    line-height: normal;
+    top: var(--pretty-top-offset);
+    border: 1px solid transparent;
+    opacity: 0;
+}
+
+.pretty.p-svg .state svg {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    line-height: 1;
+}
+
+.pretty.p-svg input:checked ~ .state .svg {
+    opacity: 1;
+}
+
+.pretty.p-image .state img {
+    opacity: 0;
+    position: absolute;
+    width: var(--pretty-box-size);
+    height: var(--pretty-box-size);
+    top: 0;
+    top: var(--pretty-top-offset);
+    left: 0;
+    z-index: var(--pretty-z-index-back);
+    text-align: center;
+    line-height: normal;
+    -webkit-transform: scale(0.8);
+    -ms-transform: scale(0.8);
+    transform: scale(0.8);
+}
+
+.pretty.p-image input:checked ~ .state img {
+    opacity: 1;
+}
+
+.pretty.p-switch input {
+    min-width: 2em;
+}
+
+.pretty.p-switch .state {
+    position: relative;
+}
+
+.pretty.p-switch .state:before {
+    content: '';
+    border: 1px solid var(--pretty-color-default);
+    border-radius: 60px;
+    width: 2em;
+    box-sizing: unset;
+    height: var(--pretty-box-size);
+    position: absolute;
+    top: 0;
+    top: var(--pretty-top-switch);
+    z-index: var(--pretty-z-index-back);
+    transition: all 0.5s ease;
+}
+
+.pretty.p-switch .state label {
+    text-indent: var(--pretty-label-text-offset-switch);
+}
+
+.pretty.p-switch .state label:before,
+.pretty.p-switch .state label:after {
+    transition: all 0.5s ease;
+    border-radius: 100%;
+    left: 0;
+    border-color: transparent;
+    -webkit-transform: scale(0.8);
+    -ms-transform: scale(0.8);
+    transform: scale(0.8);
+}
+
+.pretty.p-switch .state label:after {
+    background-color: var(--pretty-color-default) !important;
+}
+
+.pretty.p-switch input:checked ~ .state:before {
+    border-color: var(--pretty-color-dark);
+}
+
+.pretty.p-switch input:checked ~ .state label:before {
+    opacity: 0;
+}
+
+.pretty.p-switch input:checked ~ .state label:after {
+    background-color: var(--pretty-color-dark) !important;
+    left: 1em;
+}
+
+.pretty.p-switch.p-fill input:checked ~ .state:before {
+    border-color: var(--pretty-color-dark);
+    background-color: var(--pretty-color-dark) !important;
+}
+
+.pretty.p-switch.p-fill input:checked ~ .state label:before {
+    opacity: 0;
+}
+
+.pretty.p-switch.p-fill input:checked ~ .state label:after {
+    background-color: #fff !important;
+    left: 1em;
+}
+
+.pretty.p-switch.p-slim .state:before {
+    height: 0.1em;
+    background: var(--pretty-color-default) !important;
+    top: calc(50% - 0.1em);
+}
+
+.pretty.p-switch.p-slim input:checked ~ .state:before {
+    border-color: var(--pretty-color-dark);
+    background-color: var(--pretty-color-dark) !important;
+}
+
+.pretty.p-has-hover input:hover ~ .state:not(.p-is-hover) {
+    display: none;
+}
+
+.pretty.p-has-hover input:hover ~ .state.p-is-hover {
+    display: block;
+}
+
+.pretty.p-has-hover input:hover ~ .state.p-is-hover .icon {
+    display: block;
+}
+
+.pretty.p-has-focus input:focus ~ .state label:before {
+    box-shadow: 0px 0px 3px 0px var(--pretty-color-default);
+}
+
+.pretty.p-has-indeterminate input[type='checkbox']:indeterminate ~ .state:not(.p-is-indeterminate) {
+    display: none;
+}
+
+.pretty.p-has-indeterminate input[type='checkbox']:indeterminate ~ .state.p-is-indeterminate {
+    display: block;
+}
+
+.pretty.p-has-indeterminate input[type='checkbox']:indeterminate ~ .state.p-is-indeterminate .icon {
+    display: block;
+    opacity: 1;
+}
+
+.pretty.p-toggle .state.p-on {
+    opacity: 0;
+    display: none;
+}
+
+.pretty.p-toggle .state.p-off,
+.pretty.p-toggle .state .icon,
+.pretty.p-toggle .state .svg,
+.pretty.p-toggle .state img {
+    opacity: 1;
+    display: inherit;
+}
+
+.pretty.p-toggle .state.p-off .icon {
+    color: var(--pretty-color-default);
+}
+
+.pretty.p-toggle input:checked ~ .state.p-on {
+    opacity: 1;
+    display: inherit;
+}
+
+.pretty.p-toggle input:checked ~ .state.p-off {
+    opacity: 0;
+    display: none;
+}
+
+.pretty.p-plain input:checked ~ .state label:before,
+.pretty.p-plain.p-toggle .state label:before {
+    content: none;
+}
+
+.pretty.p-plain.p-plain .icon {
+    -webkit-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    transform: scale(1.1);
+}
+
+.pretty.p-round .state label:before,
+.pretty.p-round .state label:after {
+    border-radius: 100%;
+}
+
+.pretty.p-round.p-icon .state .icon {
+    border-radius: 100%;
+    overflow: hidden;
+}
+
+.pretty.p-round.p-icon .state .icon:before {
+    -webkit-transform: scale(0.8);
+    -ms-transform: scale(0.8);
+    transform: scale(0.8);
+}
+
+.pretty.p-curve .state label:before,
+.pretty.p-curve .state label:after {
+    border-radius: var(--pretty-curve-radius);
+}
+
+.pretty.p-smooth label:before,
+.pretty.p-smooth label:after,
+.pretty.p-smooth .icon,
+.pretty.p-smooth .svg {
+    transition: all 0.5s ease;
+}
+
+.pretty.p-smooth input:checked + .state label:after {
+    transition: all 0.3s ease;
+}
+
+.pretty.p-smooth input:checked + .state .icon,
+.pretty.p-smooth input:checked + .state .svg,
+.pretty.p-smooth input:checked + .state img {
+    -webkit-animation: zoom 0.2s ease;
+    animation: zoom 0.2s ease;
+}
+
+.pretty.p-smooth.p-default input:checked + .state label:after {
+    -webkit-animation: zoom 0.2s ease;
+    animation: zoom 0.2s ease;
+}
+
+.pretty.p-smooth.p-plain input:checked + .state label:before {
+    content: '';
+    -webkit-transform: scale(0);
+    -ms-transform: scale(0);
+    transform: scale(0);
+    transition: all 0.5s ease;
+}
+
+.pretty.p-tada:not(.p-default) input:checked + .state .icon,
+.pretty.p-tada:not(.p-default) input:checked + .state .svg,
+.pretty.p-tada:not(.p-default) input:checked + .state img,
+.pretty.p-tada:not(.p-default) input:checked + .state label:before,
+.pretty.p-tada:not(.p-default) input:checked + .state label:after {
+    -webkit-animation: tada 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1 alternate;
+    animation: tada 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1 alternate;
+    opacity: 1;
+}
+
+.pretty.p-jelly:not(.p-default) input:checked + .state .icon,
+.pretty.p-jelly:not(.p-default) input:checked + .state .svg,
+.pretty.p-jelly:not(.p-default) input:checked + .state img,
+.pretty.p-jelly:not(.p-default) input:checked + .state label:before,
+.pretty.p-jelly:not(.p-default) input:checked + .state label:after {
+    -webkit-animation: jelly 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    animation: jelly 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    opacity: 1;
+}
+
+.pretty.p-jelly:not(.p-default) input:checked + .state label:before {
+    border-color: transparent;
+}
+
+.pretty.p-rotate:not(.p-default) input:checked ~ .state .icon,
+.pretty.p-rotate:not(.p-default) input:checked ~ .state .svg,
+.pretty.p-rotate:not(.p-default) input:checked ~ .state img,
+.pretty.p-rotate:not(.p-default) input:checked ~ .state label:before,
+.pretty.p-rotate:not(.p-default) input:checked ~ .state label:after {
+    -webkit-animation: rotate 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    animation: rotate 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    opacity: 1;
+}
+
+.pretty.p-rotate:not(.p-default) input:checked ~ .state label:before {
+    border-color: transparent;
+}
+
+.pretty.p-pulse:not(.p-switch) input:checked ~ .state label:before {
+    -webkit-animation: pulse 1s;
+    animation: pulse 1s;
+}
+
+.pretty input[disabled] {
+    cursor: not-allowed;
+    display: none;
+}
+
+.pretty input[disabled] ~ * {
+    opacity: .5;
+}
+
+.pretty.p-locked input {
+    display: none;
+    cursor: not-allowed;
+}
+
+.pretty input:checked ~ .state.p-primary label:after,
+.pretty.p-toggle .state.p-primary label:after {
+    background-color: var(--pretty-color-primary) !important;
+}
+
+.pretty input:checked ~ .state.p-primary .icon,
+.pretty input:checked ~ .state.p-primary .svg,
+.pretty.p-toggle .state.p-primary .icon,
+.pretty.p-toggle .state.p-primary .svg {
+    color: #fff;
+    stroke: #fff;
+}
+
+.pretty input:checked ~ .state.p-primary-o label:before,
+.pretty.p-toggle .state.p-primary-o label:before {
+    border-color: var(--pretty-color-primary);
+}
+
+.pretty input:checked ~ .state.p-primary-o label:after,
+.pretty.p-toggle .state.p-primary-o label:after {
+    background-color: transparent;
+}
+
+.pretty input:checked ~ .state.p-primary-o .icon,
+.pretty input:checked ~ .state.p-primary-o .svg,
+.pretty input:checked ~ .state.p-primary-o svg,
+.pretty.p-toggle .state.p-primary-o .icon,
+.pretty.p-toggle .state.p-primary-o .svg,
+.pretty.p-toggle .state.p-primary-o svg {
+    color: var(--pretty-color-primary);
+    stroke: var(--pretty-color-primary);
+}
+
+.pretty.p-default:not(.p-fill) input:checked ~ .state.p-primary-o label:after {
+    background-color: var(--pretty-color-primary) !important;
+}
+
+.pretty.p-switch input:checked ~ .state.p-primary:before {
+    border-color: var(--pretty-color-primary);
+}
+
+.pretty.p-switch.p-fill input:checked ~ .state.p-primary:before {
+    background-color: var(--pretty-color-primary) !important;
+}
+
+.pretty.p-switch.p-slim input:checked ~ .state.p-primary:before {
+    /* darken($color, 20%); ==> #245682; */
+    border-color:     hsl(from var(--pretty-color-primary) h s calc(l * 20%));
+    background-color: hsl(from var(--pretty-color-primary) h s calc(l * 20%)) !important;
+}
+
+.pretty input:checked ~ .state.p-info label:after,
+.pretty.p-toggle .state.p-info label:after {
+    background-color: var(--pretty-color-info) !important;
+}
+
+.pretty input:checked ~ .state.p-info .icon,
+.pretty input:checked ~ .state.p-info .svg,
+.pretty.p-toggle .state.p-info .icon,
+.pretty.p-toggle .state.p-info .svg {
+    color: #fff;
+    stroke: #fff;
+}
+
+.pretty input:checked ~ .state.p-info-o label:before,
+.pretty.p-toggle .state.p-info-o label:before {
+    border-color: var(--pretty-color-info);
+}
+
+.pretty input:checked ~ .state.p-info-o label:after,
+.pretty.p-toggle .state.p-info-o label:after {
+    background-color: transparent;
+}
+
+.pretty input:checked ~ .state.p-info-o .icon,
+.pretty input:checked ~ .state.p-info-o .svg,
+.pretty input:checked ~ .state.p-info-o svg,
+.pretty.p-toggle .state.p-info-o .icon,
+.pretty.p-toggle .state.p-info-o .svg,
+.pretty.p-toggle .state.p-info-o svg {
+    color: var(--pretty-color-info);
+    stroke: var(--pretty-color-info);
+}
+
+.pretty.p-default:not(.p-fill) input:checked ~ .state.p-info-o label:after {
+    background-color: var(--pretty-color-info) !important;
+}
+
+.pretty.p-switch input:checked ~ .state.p-info:before {
+    border-color: var(--pretty-color-info);
+}
+
+.pretty.p-switch.p-fill input:checked ~ .state.p-info:before {
+    background-color: var(--pretty-color-info) !important;
+}
+
+.pretty.p-switch.p-slim input:checked ~ .state.p-info:before {
+    /* darken($color, 20%); ==> #2390b0; */
+    border-color:     hsl(from var(--pretty-color-info) h s calc(l * 20%));
+    background-color: hsl(from var(--pretty-color-info) h s calc(l * 20%)) !important;
+}
+
+.pretty input:checked ~ .state.p-success label:after,
+.pretty.p-toggle .state.p-success label:after {
+    background-color: var(--pretty-color-success) !important;
+}
+
+.pretty input:checked ~ .state.p-success .icon,
+.pretty input:checked ~ .state.p-success .svg,
+.pretty.p-toggle .state.p-success .icon,
+.pretty.p-toggle .state.p-success .svg {
+    color: #fff;
+    stroke: #fff;
+}
+
+.pretty input:checked ~ .state.p-success-o label:before,
+.pretty.p-toggle .state.p-success-o label:before {
+    border-color: var(--pretty-color-success);
+}
+
+.pretty input:checked ~ .state.p-success-o label:after,
+.pretty.p-toggle .state.p-success-o label:after {
+    background-color: transparent;
+}
+
+.pretty input:checked ~ .state.p-success-o .icon,
+.pretty input:checked ~ .state.p-success-o .svg,
+.pretty input:checked ~ .state.p-success-o svg,
+.pretty.p-toggle .state.p-success-o .icon,
+.pretty.p-toggle .state.p-success-o .svg,
+.pretty.p-toggle .state.p-success-o svg {
+    color: var(--pretty-color-success);
+    stroke: var(--pretty-color-success);
+}
+
+.pretty.p-default:not(.p-fill) input:checked ~ .state.p-success-o label:after {
+    background-color: var(--pretty-color-success) !important;
+}
+
+.pretty.p-switch input:checked ~ .state.p-success:before {
+    border-color: var(--pretty-color-success);
+}
+
+.pretty.p-switch.p-fill input:checked ~ .state.p-success:before {
+    background-color: var(--pretty-color-success) !important;
+}
+
+.pretty.p-switch.p-slim input:checked ~ .state.p-success:before {
+    /* darken($color, 20%); ==> #357935; */
+    border-color:     hsl(from var(--pretty-color-success) h s calc(l * 20%));
+    background-color: hsl(from var(--pretty-color-success) h s calc(l * 20%)) !important;
+}
+
+.pretty input:checked ~ .state.p-warning label:after,
+.pretty.p-toggle .state.p-warning label:after {
+    background-color: var(--pretty-color-warning) !important;
+}
+
+.pretty input:checked ~ .state.p-warning .icon,
+.pretty input:checked ~ .state.p-warning .svg,
+.pretty.p-toggle .state.p-warning .icon,
+.pretty.p-toggle .state.p-warning .svg {
+    color: #fff;
+    stroke: #fff;
+}
+
+.pretty input:checked ~ .state.p-warning-o label:before,
+.pretty.p-toggle .state.p-warning-o label:before {
+    border-color: var(--pretty-color-warning);
+}
+
+.pretty input:checked ~ .state.p-warning-o label:after,
+.pretty.p-toggle .state.p-warning-o label:after {
+    background-color: transparent;
+}
+
+.pretty input:checked ~ .state.p-warning-o .icon,
+.pretty input:checked ~ .state.p-warning-o .svg,
+.pretty input:checked ~ .state.p-warning-o svg,
+.pretty.p-toggle .state.p-warning-o .icon,
+.pretty.p-toggle .state.p-warning-o .svg,
+.pretty.p-toggle .state.p-warning-o svg {
+    color: var(--pretty-color-warning);
+    stroke: var(--pretty-color-warning);
+}
+
+.pretty.p-default:not(.p-fill) input:checked ~ .state.p-warning-o label:after {
+    background-color: var(--pretty-color-warning) !important;
+}
+
+.pretty.p-switch input:checked ~ .state.p-warning:before {
+    border-color: var(--pretty-color-warning);
+}
+
+.pretty.p-switch.p-fill input:checked ~ .state.p-warning:before {
+    background-color: var(--pretty-color-warning) !important;
+}
+
+.pretty.p-switch.p-slim input:checked ~ .state.p-warning:before {
+    /* darken($color, 20%); ==> #c77c11; */
+    border-color:     hsl(from var(--pretty-color-warning) h s calc(l * 20%)); 
+    background-color: hsl(from var(--pretty-color-warning) h s calc(l * 20%)) !important;
+}
+
+.pretty input:checked ~ .state.p-danger label:after,
+.pretty.p-toggle .state.p-danger label:after {
+    background-color: var(--pretty-color-danger) !important;
+}
+
+.pretty input:checked ~ .state.p-danger .icon,
+.pretty input:checked ~ .state.p-danger .svg,
+.pretty.p-toggle .state.p-danger .icon,
+.pretty.p-toggle .state.p-danger .svg {
+    color: #fff;
+    stroke: #fff;
+}
+
+.pretty input:checked ~ .state.p-danger-o label:before,
+.pretty.p-toggle .state.p-danger-o label:before {
+    border-color: var(--pretty-color-danger);
+}
+
+.pretty input:checked ~ .state.p-danger-o label:after,
+.pretty.p-toggle .state.p-danger-o label:after {
+    background-color: transparent;
+}
+
+.pretty input:checked ~ .state.p-danger-o .icon,
+.pretty input:checked ~ .state.p-danger-o .svg,
+.pretty input:checked ~ .state.p-danger-o svg,
+.pretty.p-toggle .state.p-danger-o .icon,
+.pretty.p-toggle .state.p-danger-o .svg,
+.pretty.p-toggle .state.p-danger-o svg {
+    color:  var(--pretty-color-danger);
+    stroke: var(--pretty-color-danger);
+}
+
+.pretty.p-default:not(.p-fill) input:checked ~ .state.p-danger-o label:after {
+    background-color: var(--pretty-color-danger) !important;
+}
+
+.pretty.p-switch input:checked ~ .state.p-danger:before {
+    border-color: var(--pretty-color-danger);
+}
+
+.pretty.p-switch.p-fill input:checked ~ .state.p-danger:before {
+    background-color: var(--pretty-color-danger) !important;
+}
+
+.pretty.p-switch.p-slim input:checked ~ .state.p-danger:before {
+    /* darken(--pretty-color-dark, 20%); ==> #a02622 */
+    border-color:     hsl(from var(--pretty-color-danger) h s calc(l * 20%));
+    background-color: hsl(from var(--pretty-color-danger) h s calc(l * 20%)) !important;
+}
+
+.pretty.p-bigger label:before,
+.pretty.p-bigger label:after,
+.pretty.p-bigger .icon,
+.pretty.p-bigger .svg,
+.pretty.p-bigger .img {
+    font-size: var(--pretty-2x) !important;
+    top: calc((0% - (100% - 1em)) - 35%) !important;
+}
+
+.pretty.p-bigger label {
+    text-indent: 1.7em;
+}
+
+@media print {
+    .pretty .state:before,
+    .pretty .state label:before,
+    .pretty .state label:after,
+    .pretty .state .icon {
+        color-adjust: exact;
+        /* stylelint-disable */
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}
